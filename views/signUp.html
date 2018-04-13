@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>signUp</title>
+</head>
+<body>
+<div>
+  <form method="post" action="/auth.php">
+    <p>
+      <label id="login">имя</label>
+      <input title="login" type="text" name="login" value="~login~"/>
+    </p>
+    <p>
+      <label id="pass">пароль</label>
+      <input title="password" type="password" name="pass" value="~pass~"/>
+    </p>
+    <p>
+      <label id="pass2">повторите пароль</label>
+      <input title="password2" type="password" name="pass2" value="~pass2~"/>
+    </p>
+    <p>
+      <label id="remember-me">запомнить меня</label>
+      <input title="remember-me" type="checkbox" name="remember-me" ~rememberMe~/>
+    </p>
+    <hr/>
+    <p>
+      <button name="do-signup" type="submit">зарегистрироваться</button>
+    </p>
+  </form>
+</div>
+</body>
+</html>
