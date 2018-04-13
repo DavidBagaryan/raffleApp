@@ -24,20 +24,21 @@ class Renderer
      */
     public function __construct($templateName)
     {
-        $this->template = file_get_contents(self::VIEW . DIRECTORY_SEPARATOR . $templateName);
+        $this->template = !is_null($templateName)
+            ? file_get_contents(self::VIEW . DIRECTORY_SEPARATOR . $templateName)
+            : null;
     }
 
     /**
      * @param $params
-     * @return bool|string
+     * @return string|null
      */
-    function render($params)
+    function render($params = null)
     {
-        if (is_array($params))
+        if (!is_null($params) and is_array($params))
             foreach ($params as $param => $value)
-                $this->template = str_replace("~{$param}~", $value, $this->template);
+                $this->template = str_replace("~{$param}~", $value ? $value : null, $this->template);
 
-
-        return $this->template ? $this->template : null;
+        return $this->template;
     }
 }

@@ -32,7 +32,7 @@ class DataBase
      */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) return self::$instance = static::getConnection();
+        if (is_null(self::$instance)) return self::$instance = self::getConnection();
         else return self::$instance;
     }
 

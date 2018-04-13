@@ -10,6 +10,7 @@ namespace app\models\authServices;
 
 
 use app\models\DataBase;
+use Exception;
 
 abstract class AuthService
 {
@@ -42,25 +43,25 @@ abstract class AuthService
     static $errors = [];
 
     /**
-     * @var string|null
+     * @var string
      */
     static $login = null;
 
     /**
-     * @var string|null
+     * @var string
      */
     static $password = null;
 
     /**
-     * @var string|null
+     * @var string
      */
     static $password2 = null;
 
     /**
      * AuthService constructor.
-     * @param string $serviceTemplate
+     * @param string|null $serviceTemplate
      */
-    public function __construct($serviceTemplate)
+    public function __construct($serviceTemplate = null)
     {
         $this->serviceTemplate = $serviceTemplate;
     }
@@ -78,16 +79,21 @@ abstract class AuthService
         self::$password = self::$postData['password'];
         self::$password2 = self::$postData['password2'];
 
-        if (self::$getData['action'] === 'signUp') return new SignUpService('signUp.html');
-        if (self::$getData['action'] === 'login') return new LoginService('login.html');
-        else throw new \Exception('underfind action for ' . __METHOD__);
+        if (isset(self::$getData['action'])){
+            if (self::$getData['action'] === 'signUp') return new SignUpService('signUp.html');
+            if (self::$getData['action'] === 'login') return new LoginService('login.html');
+            else throw new Exception('underfind action for ' . __METHOD__);
+        } else return new NoService();
     }
 
+    /**
+     * @return string|null
+     */
     abstract function auth();
 
     protected function getUserData()
     {
-        $query = 'SELECT * FROM users WHERE user_login = ?';
+        $query = 'SELECT * FROM raffle_users WHERE user_login = ?';
         $user = DataBase::getInstance()->prepare($query);
         $user->execute([self::$login]);
 
