@@ -76,8 +76,8 @@ abstract class AuthService
         self::$getData = $_GET;
 
         self::$login = trim(self::$postData['login']);
-        self::$password = self::$postData['password'];
-        self::$password2 = self::$postData['password2'];
+        self::$password = self::$postData['pass'];
+        self::$password2 = self::$postData['pass2'];
 
         if (isset(self::$getData['action'])){
             if (self::$getData['action'] === 'signUp') return new SignUpService('signUp.html');

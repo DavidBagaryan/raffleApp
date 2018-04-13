@@ -13,12 +13,12 @@
 
 -- Дамп структуры для таблица testDB.raffle_users
 CREATE TABLE IF NOT EXISTS `raffle_users` (
-  `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(255) NOT NULL AUTO_INCREMENT,
   `user_login` varchar(255) NOT NULL,
   `user_password` varchar(255) NOT NULL,
-  `is_active` char(1) NOT NULL,
+  `is_active` char(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

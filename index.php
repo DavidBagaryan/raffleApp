@@ -23,21 +23,15 @@ spl_autoload_register(function ($class) {
 
 try {
     $indexContent = new Renderer('index.html');
+
     $authService = AuthService::check();
-
-    $authService->auth();
     $authContent = new Renderer($authService->getServiceTemplate());
-
-    echo $indexContent->render([
-        'module' => $authContent->render($userDefaultParams)
-    ]);
-
 } catch (Exception $e) {
     $e->getMessage();
+} finally {
+    echo $indexContent->render([
+        'module' => $authContent->render($userDefaultParams),
+        'errors' => $authService->auth(),
+    ]);
 }
-//finally {
-//
-//}
-
-var_dump($_POST);
 

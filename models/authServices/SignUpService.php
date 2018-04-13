@@ -29,7 +29,7 @@ class SignUpService extends AuthService
 
     private function addUser()
     {
-        $query = 'INSERT INTO users (`user_login`, `user_password`) VALUES (?, ?)';
+        $query = 'INSERT INTO raffle_users (`user_login`, `user_password`) VALUES (?, ?)';
 
         DataBase::getInstance()->prepare($query)
             ->execute([self::$login, password_hash(self::$password, PASSWORD_DEFAULT)]);

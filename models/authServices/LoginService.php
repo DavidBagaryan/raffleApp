@@ -14,8 +14,7 @@ class LoginService extends AuthService
     function auth()
     {
         $getUserData = $this->getUserData();
-
-        if (self::$login == '') self::$errors[] = 'введите логин';
+        if (self::$login === '') self::$errors[] = 'введите логин';
         if ($getUserData['loginMatches'] > 0)
             if (password_verify(self::$password, $getUserData['user']['user_password']))
                 $this->enterUserParams($getUserData['user']);

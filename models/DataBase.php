@@ -18,7 +18,6 @@ class DataBase
      */
     protected static $instance;
 
-
     private function __construct()
     {
     }
