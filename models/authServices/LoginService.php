@@ -11,21 +11,29 @@ namespace app\models\authServices;
 
 class LoginService extends AuthService
 {
-    function auth()
+    const PASSWORD_ERROR = 'неправильно введен пароль';
+
+    const USER_LOGIN_NO_MATCH = 'пользователь с таким логином не найден';
+
+    function action()
     {
         $getUserData = $this->getUserData();
-        if (self::$login === '') self::$errors[] = 'введите логин';
+
+        $this->checkLogPass();
+        $this->checkInputLength();
+
         if ($getUserData['loginMatches'] > 0)
             if (password_verify(self::$password, $getUserData['user']['user_password']))
                 $this->enterUserParams($getUserData['user']);
-            else self::$errors[] = 'неправильно введен пароль';
-        else self::$errors[] = 'пользователь с таким логином не найден';
+            else self::$errors[] = self::PASSWORD_ERROR;
+        else self::$errors[] = self::USER_LOGIN_NO_MATCH;
+
         return array_shift(self::$errors);
     }
 
     function enterUserParams($user)
     {
-        $_SESSION['logged_user'] = $user;
+        $_SESSION['loggedUser'] = $user;
         self::$errors[] = 'вход в аккаунт';
         header("refresh:1; url=/");
     }

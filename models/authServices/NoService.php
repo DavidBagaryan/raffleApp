@@ -11,7 +11,7 @@ namespace app\models\authServices;
 
 class NoService extends AuthService
 {
-    function auth()
+    function action()
     {
         return null;
     }

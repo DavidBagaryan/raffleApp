@@ -23,6 +23,8 @@ spl_autoload_register(function ($class) {
 
 try {
     $indexContent = new Renderer('index.html');
+    $authMenu = is_null($loggedUser = $_SESSION['loggedUser'])
+        ? new Renderer('authMenu.html') : new Renderer('loggedUser.html');
 
     $authService = AuthService::check();
     $authContent = new Renderer($authService->getServiceTemplate());
@@ -30,8 +32,9 @@ try {
     $e->getMessage();
 } finally {
     echo $indexContent->render([
+        'authMenu' => $authMenu->render(['user' => $loggedUser['user_login']]),
         'module' => $authContent->render($userDefaultParams),
-        'errors' => $authService->auth(),
+        'errors' => $authService->action(),
     ]);
 }
 
