@@ -19,27 +19,16 @@ class SignUpService extends AuthService
 
     function action()
     {
-        $getUserData = $this->getUserData();
+        $userData = $this->getUserData();
 
         $this->checkLogPass();
-        $this->checkInputLength();
-        $this->checkSecondPassLength();
 
         if (self::$password2 !== self::$password) self::$errors[] = self::PASSWORD_VERIFICATION_ERROR;
-        if ($getUserData['loginMatches'] > 0) self::$errors[] = self::USER_LOGIN_MATCH_ERROR;
+        if ($userData['loginMatches'] > 0) self::$errors[] = self::USER_LOGIN_MATCH_ERROR;
 
         if (empty(self::$errors)) $this->addUser();
 
         return array_shift(self::$errors);
-    }
-
-    protected function checkSecondPassLength()
-    {
-        $long = (strlen(self::$password2) > 200);
-        $short = (strlen(self::$password2) < 5);
-
-        if ($long) self::$errors[] = self::TOO_LONG;
-        if ($short) self::$errors[] = self::TOO_SHORT;
     }
 
     private function addUser()

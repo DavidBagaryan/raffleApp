@@ -13,18 +13,20 @@ class LoginService extends AuthService
 {
     const PASSWORD_ERROR = 'неправильно введен пароль';
 
+    const USER_DISABLE = 'аккаунт этого пользователя неактивен';
+
     const USER_LOGIN_NO_MATCH = 'пользователь с таким логином не найден';
 
     function action()
     {
-        $getUserData = $this->getUserData();
+        $userData = $this->getUserData();
 
         $this->checkLogPass();
-        $this->checkInputLength();
 
-        if ($getUserData['loginMatches'] > 0)
-            if (password_verify(self::$password, $getUserData['user']['user_password']))
-                $this->enterUserParams($getUserData['user']);
+        if ($userData['loginMatches'] > 0)
+            if (password_verify(self::$password, $userData['user']['user_password']))
+                if ($userData['user']['is_active'] === 'Y') $this->enterUserParams($userData['user']);
+                else self::$errors[] = self::USER_DISABLE;
             else self::$errors[] = self::PASSWORD_ERROR;
         else self::$errors[] = self::USER_LOGIN_NO_MATCH;
 

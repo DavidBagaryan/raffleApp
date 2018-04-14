@@ -79,6 +79,9 @@ abstract class AuthService
         return $this->serviceTemplate;
     }
 
+    /**
+     * @return array
+     */
     protected function getUserData()
     {
         $query = 'SELECT * FROM raffle_users WHERE user_login = ?';
@@ -95,6 +98,7 @@ abstract class AuthService
     {
         if (self::$login === '') self::$errors[] = self::EMPTY_LOGIN;
         if (self::$password === '') self::$errors[] = self::EMPTY_PASSWORD;
+        $this->checkInputLength();
     }
 
     protected function checkInputLength()
