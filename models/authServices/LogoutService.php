@@ -13,9 +13,12 @@ class LogoutService extends AuthService
 {
     function action()
     {
-        unset($_SESSION['loggedUser']);
-        session_destroy();
-        header("refresh:1; url=/");
-        return null;
+        if (isset($_SESSION['loggedUser'])) {
+            unset($_SESSION);
+            session_destroy();
+            header("refresh:1; url=/");
+            self::$errors[] = 'До свидания!';
+        }
+        return array_shift(self::$errors);
     }
 }

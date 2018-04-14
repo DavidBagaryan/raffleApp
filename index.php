@@ -7,6 +7,7 @@
  */
 
 use app\models\Helper;
+use app\models\Raffle;
 use app\models\Renderer;
 use app\models\authServices\AuthService;
 
@@ -21,15 +22,20 @@ spl_autoload_register(function ($class) {
 });
 
 try {
+    $authService = AuthService::check();
+    $raffle = Raffle::check();
+
     $indexContent = new Renderer('index.html');
 
-    $menu = is_null($loggedUser)
-        ? new Renderer('authMenu.html') : new Renderer('loggedUser.html');
+    if (is_null($loggedUser)) {
+        $menu = new Renderer('authMenu.html');
+        $content = new Renderer($authService->getServiceTemplate());
+    } else {
+        $menu = new Renderer('loggedUser.html');
+        $content = is_null($_SESSION['giftToken'])
+            ? new Renderer('raffle.html') : new Renderer('userChoice.html');
+    }
 
-    $authService = AuthService::check();
-
-    $content = is_null($loggedUser) ?
-        new Renderer($authService->getServiceTemplate()) : new Renderer('raffle.html');
 } catch (Exception $e) {
     $e->getMessage();
 } finally {
@@ -40,4 +46,4 @@ try {
     ]);
 }
 
-var_dump($_POST);
+var_dump($_SESSION, $_POST, $content, $authService);

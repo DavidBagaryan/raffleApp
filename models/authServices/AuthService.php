@@ -19,7 +19,7 @@ abstract class AuthService
     const EMPTY_PASSWORD = 'введите пароль';
 
     const TOO_LONG = 'длина логина/пароля может быть не более 200 символов!';
-    
+
     const TOO_SHORT = 'длина логина/пароля может быть не менее 5 символов!';
 
     /**
@@ -123,11 +123,23 @@ abstract class AuthService
         self::$password = self::$postData['pass'];
         self::$password2 = self::$postData['pass2'];
 
-        if (isset(self::$getData['action'])){
-            if (self::$getData['action'] === 'signUp') return new SignUpService('signUp.html');
-            if (self::$getData['action'] === 'login') return new LoginService('login.html');
-            if (self::$getData['action'] === 'logout') return new LogoutService('logout.html');
-            else throw new Exception('underfind action for ' . __METHOD__);
-        } else return new NoService();
+        if (isset(self::$getData['action'])) {
+            switch (self::$getData['action']) {
+                case 'signUp':
+                    return new SignUpService('signUp.html');
+                    break;
+                case 'login':
+                    return new LoginService('login.html');
+                    break;
+                case 'logout':
+                    return new LogoutService();
+                    break;
+                default:
+                    throw new Exception('undefined action for ' . __METHOD__);
+                    break;
+            }
+        }
+    else
+        return new NoService();
     }
 }

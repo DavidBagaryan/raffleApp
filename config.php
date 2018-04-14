@@ -24,6 +24,8 @@ $userDefaultParams = [
     'pass2' => $_POST['pass2'],
     'id' => $loggedUser['id'],
     'userLogin' => $loggedUser['user_login'],
-    'randomNum' => rand(1,3),
+    'randomGift' => rand(1,3),
+    'giftToken' => rand(10000,99999),
+    'gift' => $_SESSION['giftValue']
 ];
 
