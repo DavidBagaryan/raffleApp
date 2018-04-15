@@ -23,27 +23,38 @@ spl_autoload_register(function ($class) {
 
 try {
     $authService = AuthService::check();
+
+    if (!is_null($_SESSION['loggedUser'])) {
+        $userDefaultParams['id'] = $_SESSION['loggedUser']['id'];
+        $userDefaultParams['userLogin'] = $_SESSION['loggedUser']['user_login'];
+    }
+
     $raffle = Raffle::check();
+
+    if (!is_null($_SESSION['gift'])){
+        $userDefaultParams['giftType'] = $_SESSION['gift']['type'];
+        $userDefaultParams['giftValue'] = $_SESSION['gift']['value'];
+    }
+
 
     $indexContent = new Renderer('index.html');
 
-    if (is_null($loggedUser)) {
+    if (!is_null($_SESSION['loggedUser'])) {
+        $menu = new Renderer('loggedUser.html');
+        $content = is_null($_SESSION['gift']['lastToken'])
+            ? new Renderer('raffle.html') : new Renderer('userChoice.html');
+    } else {
         $menu = new Renderer('authMenu.html');
         $content = new Renderer($authService->getServiceTemplate());
-    } else {
-        $menu = new Renderer('loggedUser.html');
-        $content = is_null($_SESSION['giftToken'])
-            ? new Renderer('raffle.html') : new Renderer('userChoice.html');
     }
 
 } catch (Exception $e) {
     $e->getMessage();
 } finally {
     echo $indexContent->render([
-        'menu' => $menu->render(['userLogin' => Helper::mbUcFirst($loggedUser['user_login'])]),
+        'menu' => $menu->render(['userLogin' => Helper::mbUcFirst($_SESSION['loggedUser']['user_login'])]),
         'module' => $content->render($userDefaultParams),
         'errors' => $authService->action(),
     ]);
 }
 
-var_dump($_SESSION, $_POST, $content, $authService);

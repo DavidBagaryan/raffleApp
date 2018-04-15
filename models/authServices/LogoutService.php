@@ -19,6 +19,6 @@ class LogoutService extends AuthService
             header("refresh:1; url=/");
             self::$errors[] = 'До свидания!';
         }
-        return array_shift(self::$errors);
+        return null;
     }
 }
