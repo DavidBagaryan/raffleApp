@@ -32,7 +32,7 @@ try {
     $raffle = Raffle::check();
 
     if (!is_null($_SESSION['gift'])){
-        $userDefaultParams['giftType'] = $_SESSION['gift']['type'];
+//        $userDefaultParams['giftType'] = $_SESSION['gift']['type'];
         $userDefaultParams['giftValue'] = $_SESSION['gift']['value'];
     }
 
@@ -58,3 +58,4 @@ try {
     ]);
 }
 
+var_dump($_SESSION);

@@ -12,4 +12,9 @@ namespace app\models\gifts;
 class ThingGift extends Gift
 {
     const MAX_RANDOM = 30;
+
+    static function giftValue($giftValue)
+    {
+        return "подарок номер {$giftValue}";
+    }
 }

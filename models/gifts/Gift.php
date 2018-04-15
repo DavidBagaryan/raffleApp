@@ -24,34 +24,15 @@ abstract class Gift
     public function __construct()
     {
         $this->value = rand(0, static::MAX_RANDOM);
-
-        $_SESSION['gift']['type'] = $this->getType();;
-        $_SESSION['gift']['value'] = $this->value;
+        $_SESSION['gift']['value'] = $this->giftSelector();;
     }
 
     /**
      * @return string|null
      */
-    protected function getType()
+    protected function giftSelector()
     {
-        return self::dictionary(static::class);
-    }
-
-    private static function dictionary($className)
-    {
-        switch (preg_replace('~app\\\models\\\gifts\\\~', '', $className)) {
-            case 'MoneyGift':
-                return 'Деньги (у.е.)';
-                break;
-            case 'ThingGift':
-                return 'Подарок';
-                break;
-            case 'BonusGift':
-                return 'Бонус в нашем казино';
-                break;
-            default:
-                return null;
-        }
+        return self::dictionary(static::class, $this->value);
     }
 
     /**
@@ -69,6 +50,23 @@ abstract class Gift
                 break;
             case 3:
                 return new ThingGift();
+                break;
+            default:
+                return null;
+        }
+    }
+
+    private static function dictionary($className, $giftValue)
+    {
+        switch (preg_replace('~app\\\models\\\gifts\\\~', '', $className)) {
+            case 'MoneyGift':
+                return MoneyGift::giftValue($giftValue);
+                break;
+            case 'ThingGift':
+                return ThingGift::giftValue($giftValue);
+                break;
+            case 'BonusGift':
+                return BonusGift::giftValue($giftValue);
                 break;
             default:
                 return null;

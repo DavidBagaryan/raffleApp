@@ -12,4 +12,9 @@ namespace app\models\gifts;
 class MoneyGift extends Gift
 {
     const MAX_RANDOM = 1000;
+
+    static function giftValue($sum)
+    {
+        return "денежная сумма в размере {$sum} условных единиц";
+    }
 }

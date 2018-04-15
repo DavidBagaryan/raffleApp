@@ -12,4 +12,9 @@ namespace app\models\gifts;
 class BonusGift extends Gift
 {
     const MAX_RANDOM = 9999;
+
+    static function giftValue($bonus)
+    {
+        return "бонус в нашем казино в размере {$bonus} баллов";
+    }
 }
