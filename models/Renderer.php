@@ -20,7 +20,7 @@ class Renderer
 
     /**
      * Renderer constructor.
-     * @param $templateName
+     * @param string $templateName
      */
     public function __construct($templateName)
     {

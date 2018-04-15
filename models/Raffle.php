@@ -9,22 +9,22 @@
 namespace app\models;
 
 
-use app\models\authServices\AuthService;
 use app\models\gifts\Gift;
 
 class Raffle
 {
     /**
-     * @return Gift|null
+     * @return Gift|string|null
+     * @throws \Exception
      */
     static function check()
     {
-        $random = intval(AuthService::$postData['randomGift']);
+        $random = intval($_POST['randomGift']);
 
-        if (self::checkUser()) return null;
+        if (Helper::checkUser('raffle')) return null;
         else {
-            $_SESSION['gift']['lastToken'] = AuthService::$postData['giftToken'];
-            if (self::checkRandom($random) and AuthService::$postData['action'] === 'raffle')
+            $_SESSION['raffle']['lastToken'] = $_POST['raffleGiftToken'];
+            if (self::checkRandom($random) and $_POST['action'] === 'raffle')
                 return Gift::select($random);
             else return null;
         }
@@ -37,15 +37,5 @@ class Raffle
     private static function checkRandom($random)
     {
         return (is_numeric($random) and $random >= 1 and $random <= 3);
-    }
-
-    /**
-     * @return bool
-     */
-    private static function checkUser()
-    {
-        return (AuthService::$postData['giftToken'] === $_SESSION['gift']['lastToken']
-            or (AuthService::$postData['userId'] !== $_SESSION['loggedUser']['id']
-                and AuthService::$postData['userLogin'] !== $_SESSION['loggedUser']['user_login']));
     }
 }

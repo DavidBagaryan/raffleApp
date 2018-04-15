@@ -1,3 +1,17 @@
-
 ваш подарок: <h3>~giftValue~</h3>
 как вы распорядитесь им?
+
+<form method="post" name="userChoice">
+  <input type="hidden" name="raffleGiftToken" value="~giftToken~">
+  <input type="hidden" name="choseGiftToken" value="~giftToken~">
+
+  <input type="hidden" name="userId" value="~id~">
+  <input type="hidden" name="userLogin" value="~userLogin~">
+
+  <input type="hidden" name="giftId" value="~giftId~">
+  <input type="hidden" name="giftName" value="~giftName~">
+
+  <button formaction="/?giftAction=first">~userChoiceFirst~</button>
+  <button formaction="/?giftAction=second">~userChoiceSecond~</button>
+</form>
+

@@ -1,11 +1,15 @@
 <h2>А теперь давайте испытаем вашу удачу!</h2>
 
-<form method="post" action="/">
+<form method="post" action="/" name="raffle">
   <input type="hidden" name="action" value="raffle">
-  <input type="hidden" name="giftToken" value="~giftToken~">
-  <!--<input type="hidden" name="randomGift" value="~randomGift~">-->
-  <input type="hidden" name="randomGift" value="~randomGift~">
+
+  <input type="hidden" name="raffleGiftToken" value="~giftToken~">
+  <input type="hidden" name="choseGiftToken" value="~giftToken~">
+
+  <input type="hidden" name="randomGift" value="3">
+
   <input type="hidden" name="userId" value="~id~">
   <input type="hidden" name="userLogin" value="~userLogin~">
+
   <button>получить приз</button>
 </form>

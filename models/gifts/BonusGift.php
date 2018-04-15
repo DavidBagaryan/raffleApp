@@ -13,6 +13,10 @@ class BonusGift extends Gift
 {
     const MAX_RANDOM = 9999;
 
+    const userChoiceFirst = 'зачислить бонусные баллы';
+
+    const userChoiceSecond = null;
+
     static function giftValue($bonus)
     {
         return "бонус в нашем казино в размере {$bonus} баллов";

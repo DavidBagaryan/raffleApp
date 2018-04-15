@@ -13,6 +13,10 @@ class MoneyGift extends Gift
 {
     const MAX_RANDOM = 1000;
 
+    const userChoiceFirst = 'отправить на счет';
+
+    const userChoiceSecond = 'конвертировать в баллы';
+
     static function giftValue($sum)
     {
         return "денежная сумма в размере {$sum} условных единиц";

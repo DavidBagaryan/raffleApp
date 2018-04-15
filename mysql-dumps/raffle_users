@@ -17,10 +17,19 @@ CREATE TABLE IF NOT EXISTS `raffle_users` (
   `user_login` varchar(255) NOT NULL,
   `user_password` varchar(255) NOT NULL,
   `is_active` char(1) NOT NULL DEFAULT 'Y',
+  `bonuses` int(11) DEFAULT NULL,
+  `address` text NOT NULL,
+  `bank_account` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Экспортируемые данные не выделены.
+-- Дамп данных таблицы testDB.raffle_users: ~2 rows (приблизительно)
+/*!40000 ALTER TABLE `raffle_users` DISABLE KEYS */;
+INSERT INTO `raffle_users` (`id`, `user_login`, `user_password`, `is_active`, `bonuses`, `address`, `bank_account`) VALUES
+	(4, 'david', '$2y$10$lN8bYJ6S6FXkU.xe5o7OieXNu12OSSXhWTFDewYNKWVGB.u7fZ/62', 'Y', NULL, '', ''),
+	(5, 'давид', '$2y$10$j.pf6nBg.zJRW.GSP9DHCOn1DpAzsqQxkF6wooJTOP59t6TtyipZ.', 'Y', NULL, '', '');
+/*!40000 ALTER TABLE `raffle_users` ENABLE KEYS */;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

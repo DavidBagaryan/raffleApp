@@ -132,7 +132,7 @@ abstract class AuthService
                     return new LoginService('login.html');
                     break;
                 case 'logout':
-                    return new LogoutService('logout.html');
+                    return new LogoutService();
                     break;
                 default:
                     throw new Exception('undefined action for ' . __METHOD__);

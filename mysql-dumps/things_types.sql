@@ -15,7 +15,7 @@
 CREATE TABLE IF NOT EXISTS `things_types` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `thing_name` char(50) NOT NULL DEFAULT 'нет имени',
-  `count` int(255) DEFAULT NULL,
+  `things_count` int(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
@@ -35,7 +35,7 @@ INSERT INTO `things_types` (`id`, `thing_name`, `count`) VALUES
 	(10, 'бесболка "VEGAS POVER"', 1050),
 	(11, 'бесболка "DESERT GOLD"', 540),
 	(12, 'набор игральных карт "сингапур"', 440),
-	(13, 'набор игральных карт "манчестерское ограбление"', 577),
+	(13, 'набор игральных карт "манчестерское ограбление"', 573),
 	(14, 'набор игральных карт "doctor MONKEY"', 1800),
 	(15, 'набор игральных карт "vegas\'s wings"', 144),
 	(16, 'набор игральных карт "eldorado\'s gold"', 13),

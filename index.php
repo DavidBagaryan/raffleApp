@@ -6,6 +6,8 @@
  * Time: 15:38
  */
 
+use app\models\authServices\LogoutService;
+use app\models\gifts\Gift;
 use app\models\Helper;
 use app\models\Raffle;
 use app\models\Renderer;
@@ -23,30 +25,45 @@ spl_autoload_register(function ($class) {
 
 try {
     $authService = AuthService::check();
+    $raffle = Raffle::check();
+    $gift = Gift::check();
 
+    //add some variables for user params
     if (!is_null($_SESSION['loggedUser'])) {
         $userDefaultParams['id'] = $_SESSION['loggedUser']['id'];
         $userDefaultParams['userLogin'] = $_SESSION['loggedUser']['user_login'];
     }
 
-    $raffle = Raffle::check();
-
-    if (!is_null($_SESSION['gift'])){
-//        $userDefaultParams['giftType'] = $_SESSION['gift']['type'];
+    // add some another variables for user params
+    if (!is_null($_SESSION['gift'])) {
         $userDefaultParams['giftValue'] = $_SESSION['gift']['value'];
+
+        $userDefaultParams['giftId'] = $_SESSION['gift']['id'];
+        $userDefaultParams['giftName'] = $_SESSION['gift']['name'];
+
+        $userDefaultParams['userChoiceFirst'] = $_SESSION['gift']['userChoiceFirst'];
+        $userDefaultParams['userChoiceSecond'] = $_SESSION['gift']['userChoiceSecond'];
     }
 
-
-    $indexContent = new Renderer('index.html');
-
+    // proto router
     if (!is_null($_SESSION['loggedUser'])) {
         $menu = new Renderer('loggedUser.html');
-        $content = is_null($_SESSION['gift']['lastToken'])
-            ? new Renderer('raffle.html') : new Renderer('userChoice.html');
+
+        if (is_null($_SESSION['raffle']['lastToken']) and is_null($_GET['giftAction']))
+            $content = new Renderer('raffle.html');
+        elseif (!is_null($_GET['giftAction']))
+            $content = new Renderer((new LogoutService('success.html'))->getServiceTemplate());
+        else $content = new Renderer('userChoice.html');
+
+//        $content = (is_null($_SESSION['raffle']['lastToken']))
+//            ? new Renderer('raffle.html') : new Renderer('userChoice.html');
     } else {
         $menu = new Renderer('authMenu.html');
         $content = new Renderer($authService->getServiceTemplate());
     }
+
+    // app bootstrap
+    $indexContent = new Renderer('index.html');
 
 } catch (Exception $e) {
     $e->getMessage();
@@ -58,4 +75,4 @@ try {
     ]);
 }
 
-var_dump($_SESSION);
+var_dump(is_null($_GET['giftAction']));
