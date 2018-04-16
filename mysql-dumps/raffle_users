@@ -14,11 +14,11 @@
 -- Дамп структуры для таблица testDB.raffle_users
 CREATE TABLE IF NOT EXISTS `raffle_users` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
-  `user_login` varchar(255) NOT NULL,
-  `user_password` varchar(255) NOT NULL,
-  `bonuses` int(11) DEFAULT '0',
-  `address` text,
-  `bank_account` text,
+  `user_login` varchar(100) NOT NULL,
+  `user_password` varchar(100) NOT NULL,
+  `bonuses` int(255) DEFAULT '0',
+  `address` varchar(100) NOT NULL DEFAULT 'нет адреса',
+  `bank_account` varchar(100) NOT NULL DEFAULT 'нет реквизитов для отправки',
   `is_active` char(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;

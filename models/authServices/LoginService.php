@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: user
+ * User: DavidBagaryan
  * Date: 13.04.2018
  * Time: 16:22
  */
@@ -20,8 +20,12 @@ class LoginService extends AuthService
     function action()
     {
         $userData = $this->getUserData();
-
         $this->checkLogPass();
+
+        self::checkLength([
+            'логин' => self::$login,
+            'пароль' => self::$password
+        ]);
 
         if ($userData['loginMatches'] > 0)
             if (password_verify(self::$password, $userData['user']['user_password']))

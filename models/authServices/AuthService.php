@@ -1,7 +1,7 @@
 <?php
 /**
  * Created by PhpStorm.
- * User: user
+ * User: DavidBagaryan
  * Date: 13.04.2018
  * Time: 16:05
  */
@@ -17,10 +17,6 @@ abstract class AuthService
     const EMPTY_LOGIN = 'введите логин';
 
     const EMPTY_PASSWORD = 'введите пароль';
-
-    const TOO_LONG = 'длина логина/пароля может быть не более 200 символов!';
-
-    const TOO_SHORT = 'длина логина/пароля может быть не менее 5 символов!';
 
     /**
      * @var string
@@ -98,16 +94,16 @@ abstract class AuthService
     {
         if (self::$login === '') self::$errors[] = self::EMPTY_LOGIN;
         if (self::$password === '') self::$errors[] = self::EMPTY_PASSWORD;
-        $this->checkInputLength();
     }
 
-    protected function checkInputLength()
+    protected static function checkLength($arrayProperties)
     {
-        $long = (mb_strlen(self::$login) > 200 or mb_strlen(self::$password) > 200);
-        $short = (mb_strlen(self::$login) < 5 or mb_strlen(self::$password) < 5);
-
-        if ($long) self::$errors[] = self::TOO_LONG;
-        if ($short) self::$errors[] = self::TOO_SHORT;
+        if (is_array($arrayProperties))
+            foreach ($arrayProperties as $property => $value)
+                if (!is_null($value) and mb_strlen($value) > 100)
+                    self::$errors[] = "поле '{$property}' не может быть более 100 символов";
+                elseif (!is_null($value) and mb_strlen($value) < 5)
+                    self::$errors[] = "поле '{$property}' не может быть менее 5 символов";
     }
 
     /**
@@ -138,8 +134,7 @@ abstract class AuthService
                     throw new Exception('undefined action for ' . __METHOD__);
                     break;
             }
-        }
-    else
-        return new NoService();
+        } else
+            return new NoService();
     }
 }
