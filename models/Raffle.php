@@ -24,8 +24,7 @@ class Raffle
         if (Helper::checkUser('raffle')) return null;
         else {
             $_SESSION['raffle']['lastToken'] = $_POST['raffleGiftToken'];
-            if (self::checkRandom($random) and $_POST['action'] === 'raffle')
-                return Gift::select($random);
+            if (self::checkRandom($random) and $_POST['action'] === 'raffle') return Gift::select($random);
             else return null;
         }
     }

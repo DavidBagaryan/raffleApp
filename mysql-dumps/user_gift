@@ -11,17 +11,16 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Дамп структуры для таблица testDB.raffle_users
-CREATE TABLE IF NOT EXISTS `raffle_users` (
+-- Дамп структуры для таблица testDB.user_gift
+CREATE TABLE IF NOT EXISTS `user_gift` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
-  `user_login` varchar(255) NOT NULL,
-  `user_password` varchar(255) NOT NULL,
-  `bonuses` int(11) DEFAULT '0',
-  `address` text NOT NULL,
-  `bank_account` text NOT NULL,
-  `is_active` char(1) NOT NULL DEFAULT 'Y',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+  `user_id` int(255) NOT NULL DEFAULT '0',
+  `thing_id` int(255) NOT NULL DEFAULT '0',
+  `date_insert` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `thing_id` (`thing_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

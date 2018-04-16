@@ -36,9 +36,26 @@ class Renderer
     function render($params = null)
     {
         if (!is_null($params) and is_array($params))
-            foreach ($params as $param => $value)
-                $this->template = str_replace("~{$param}~", $value ? $value : null, $this->template);
+            foreach ($params as $param => $value) {
+                if (!is_null($value)) $this->replaceValue($param, $value);
+                else $this->replaceTag($param);
+            }
 
         return $this->template;
+    }
+
+    private function replaceValue($param, $value)
+    {
+        $this->template = str_replace("~{$param}~", $value, $this->template);
+    }
+
+    private function replaceTag($param)
+    {
+        $fullTagPattern = function ($innerHtml) {
+            $tag = '(\<(\/?[^>]+)>)';
+            return "/{$tag}~{$innerHtml}~{$tag}/";
+        };
+
+        $this->template = preg_replace($fullTagPattern($param), '', $this->template);
     }
 }

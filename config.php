@@ -18,9 +18,9 @@ define('CHARSET', 'utf8');
 // USER DEFAULT PARAMS
 
 $userDefaultParams = [
-    'login' => $_POST['login'],
-    'pass' => $_POST['pass'],
-    'pass2' => $_POST['pass2'],
+    'login' => $_POST['login'] ? $_POST['login'] : '',
+    'pass' => $_POST['pass'] ? $_POST['pass'] : '',
+    'pass2' => $_POST['pass2'] ? $_POST['pass2'] : '',
 
     'randomGift' => rand(1,3),
     'giftToken' => rand(10000,99999),

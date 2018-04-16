@@ -6,9 +6,8 @@
  * Time: 15:38
  */
 
-use app\models\authServices\LogoutService;
 use app\models\gifts\Gift;
-use app\models\Helper;
+use app\models\gifts\ThingGift;
 use app\models\Raffle;
 use app\models\Renderer;
 use app\models\authServices\AuthService;
@@ -32,6 +31,9 @@ try {
     if (!is_null($_SESSION['loggedUser'])) {
         $userDefaultParams['id'] = $_SESSION['loggedUser']['id'];
         $userDefaultParams['userLogin'] = $_SESSION['loggedUser']['user_login'];
+        $userDefaultParams['userAddress'] = $_SESSION['loggedUser']['address'];
+        $userDefaultParams['userBank'] = $_SESSION['loggedUser']['bank_account'];
+        $userDefaultParams['userBonus'] = $_SESSION['loggedUser']['bonuses'];
     }
 
     // add some another variables for user params
@@ -49,14 +51,17 @@ try {
     if (!is_null($_SESSION['loggedUser'])) {
         $menu = new Renderer('loggedUser.html');
 
-        if (is_null($_SESSION['raffle']['lastToken']) and is_null($_GET['giftAction']))
-            $content = new Renderer('raffle.html');
-        elseif (!is_null($_GET['giftAction']))
-            $content = new Renderer((new LogoutService('success.html'))->getServiceTemplate());
-        else $content = new Renderer('userChoice.html');
+        if (is_null($_SESSION['gift'])) $content = new Renderer('raffle.html');
+        if (!is_null($_SESSION['gift']) and is_null($_GET['giftAction']))
+            $content = new Renderer('userChoice.html');
+        if (!is_null($_SESSION['gift']) and $_GET['giftAction'] === 'first') {
+            $content = new Renderer('success.html');
+            $userDefaultParams['errors'] = ThingGift::reduceList($_SESSION['gift']);
+        } elseif (!is_null($_SESSION['gift']) and $_GET['giftAction'] === 'second') {
+            $content = new Renderer('denial.html');
+            $userDefaultParams['errors'] = ThingGift::finalAction();
+        }
 
-//        $content = (is_null($_SESSION['raffle']['lastToken']))
-//            ? new Renderer('raffle.html') : new Renderer('userChoice.html');
     } else {
         $menu = new Renderer('authMenu.html');
         $content = new Renderer($authService->getServiceTemplate());
@@ -69,10 +74,10 @@ try {
     $e->getMessage();
 } finally {
     echo $indexContent->render([
-        'menu' => $menu->render(['userLogin' => Helper::mbUcFirst($_SESSION['loggedUser']['user_login'])]),
+        'menu' => $menu->render($userDefaultParams),
         'module' => $content->render($userDefaultParams),
-        'errors' => $authService->action(),
+        'errors' => $userDefaultParams['errors'] ? $userDefaultParams['errors'] : $authService->action(),
     ]);
 }
 
-var_dump(is_null($_GET['giftAction']));
+var_dump($_POST);

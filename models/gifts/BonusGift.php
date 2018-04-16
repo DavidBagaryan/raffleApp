@@ -13,7 +13,7 @@ class BonusGift extends Gift
 {
     const MAX_RANDOM = 9999;
 
-    const userChoiceFirst = 'зачислить бонусные баллы';
+    const userChoiceFirst = null;
 
     const userChoiceSecond = null;
 

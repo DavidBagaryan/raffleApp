@@ -103,8 +103,8 @@ abstract class AuthService
 
     protected function checkInputLength()
     {
-        $long = (strlen(self::$login) > 200 or strlen(self::$password) > 200);
-        $short = (strlen(self::$login) < 5 or strlen(self::$password) < 5);
+        $long = (mb_strlen(self::$login) > 200 or mb_strlen(self::$password) > 200);
+        $short = (mb_strlen(self::$login) < 5 or mb_strlen(self::$password) < 5);
 
         if ($long) self::$errors[] = self::TOO_LONG;
         if ($short) self::$errors[] = self::TOO_SHORT;
