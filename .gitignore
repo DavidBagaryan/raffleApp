@@ -1,3 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
-/cron-xmls/
+/cron-xml/
+/log/
