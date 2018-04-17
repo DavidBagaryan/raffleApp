@@ -81,6 +81,7 @@ if (count($giftIds) > 0) {
         $xml->saveXML($cronDir . DIRECTORY_SEPARATOR . $date . '_xml_bank.xml');
 
         // TODO send XML by curl or other thing
+        // TODO Make some service
 
         echo "XML was sent at {$date}";
     } else echo 'update failure!';
