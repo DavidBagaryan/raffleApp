@@ -7,6 +7,7 @@
  */
 
 use app\models\gifts\Gift;
+use app\models\gifts\MoneyGift;
 use app\models\gifts\ThingGift;
 use app\models\Raffle;
 use app\models\Renderer;
@@ -40,30 +41,45 @@ try {
 
     // add some another variables for user params
     if ($raffle and $raffle instanceof Gift) {
-        $userDefaultParams['giftValue'] = $raffle->getGiftValue()['thing_name'];
-
-        $userDefaultParams['giftId'] = ($raffle instanceof ThingGift) ? $raffle->getId() : null;
-        $userDefaultParams['giftName'] = ($raffle instanceof ThingGift) ? $raffle->getName() : null;
-
-        $userDefaultParams['userChoiceFirst'] = $raffle::userChoiceFirst;
-        $userDefaultParams['userChoiceSecond'] = $raffle::userChoiceSecond;
+        if ($raffle instanceof ThingGift) {
+            $userDefaultParams['giftValue'] = $raffle->getGiftValue()['thing_name'];
+            $userDefaultParams['giftId'] = $raffle->getId();
+            $userDefaultParams['giftName'] = $raffle->getName();
+        } else $userDefaultParams['giftValue'] = $raffle->getGiftValue();
     }
 
     // proto router
-    if (!is_null($_SESSION['loggedUser'])) {
+    if (!is_null($_SESSION['loggedUser']) and $_GET['action'] !== 'logout') {
         $menu = new Renderer('loggedUser.html');
 
         if (!$raffle) $content = new Renderer('raffle.html');
         else {
-            if ($_GET['giftAction'] === 'first') {
-                $content = new Renderer('success.html');
-                $userDefaultParams['errors'] = $raffle->reduceList($_SESSION['loggedUser']);
-            } elseif ($_GET['giftAction'] === 'second') {
-                $content = new Renderer('denial.html');
-                $userDefaultParams['errors'] = ThingGift::finalAction();
-            } else $content = new Renderer('userChoice.html');
-        }
+            $content = new Renderer('userChoice.html');
+            switch ($_GET['giftAction']) {
+                case 'first':
+                    $userDefaultParams['errors'] = $raffle->userFirstAction($_SESSION['loggedUser']);
+                    $userDefaultParams['userChoiceFirst'] = null;
+                    $userDefaultParams['userChoiceSecond'] = null;
+                    break;
+                case 'second':
+                    $secondAction = $raffle->userSecondAction($_SESSION['loggedUser']);
 
+                    if ($raffle instanceof MoneyGift) {
+                        $userDefaultParams['errors'] = $secondAction['error'];
+                        $userDefaultParams['userBonus'] = $secondAction['newBonus']
+                            ? $secondAction['newBonus']
+                            : $_SESSION['loggedUser']['bonuses'];
+                    } else $userDefaultParams['errors'] = $secondAction;
+
+                    $userDefaultParams['userChoiceFirst'] = null;
+                    $userDefaultParams['userChoiceSecond'] = null;
+                    break;
+                default:
+                    $userDefaultParams['userChoiceFirst'] = $raffle::USER_CHOICE_FIRST;
+                    $userDefaultParams['userChoiceSecond'] = $raffle::USER_CHOICE_SECOND;
+                    break;
+            }
+        }
     } else {
         $menu = new Renderer('authMenu.html');
         $content = new Renderer($authService->getServiceTemplate());
@@ -82,4 +98,4 @@ try {
     ]);
 }
 
-var_dump($_SESSION);
+//var_dump($_SESSION);

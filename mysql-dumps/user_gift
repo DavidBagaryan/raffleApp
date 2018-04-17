@@ -15,11 +15,11 @@
 CREATE TABLE IF NOT EXISTS `user_gift` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `user_id` int(255) NOT NULL DEFAULT '0',
-  `thing_id` int(255) NOT NULL DEFAULT '0',
+  `gift_count` int(255) NOT NULL DEFAULT '0',
   `date_insert` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  KEY `thing_id` (`thing_id`)
+  KEY `gift_count` (`gift_count`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.

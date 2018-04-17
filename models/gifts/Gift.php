@@ -16,9 +16,9 @@ abstract class Gift
 {
     const MAX_RANDOM = 0;
 
-    const userChoiceFirst = null;
+    const USER_CHOICE_FIRST = null;
 
-    const userChoiceSecond = null;
+    const USER_CHOICE_SECOND = null;
 
     /**
      * @var int
@@ -29,6 +29,18 @@ abstract class Gift
      * @var string
      */
     protected $giftValue = null;
+
+    /**
+     * @param $user
+     * @return null|string
+     */
+    abstract public function userFirstAction($user);
+
+    /**
+     * @param array|null $user
+     * @return array|string|null
+     */
+    abstract public function userSecondAction($user = null);
 
     /**
      * Gift constructor.
@@ -91,5 +103,16 @@ abstract class Gift
             default:
                 return null;
         }
+    }
+
+    /**
+     * @return string
+     */
+    static function endAction()
+    {
+        unset($_SESSION['loggedUser'], $_SESSION['gift']);
+        header("refresh:5; url=/");
+
+        return "спасибо, что вы с нами!\nдо свидания!";
     }
 }
