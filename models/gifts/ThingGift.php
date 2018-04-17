@@ -21,56 +21,69 @@ class ThingGift extends Gift
     const userChoiceSecond = 'отказаться';
 
     /**
-     * @param $giftValue
-     * @return array|null
+     * @var int
      */
-    static function giftValue($giftValue)
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * ThingGift constructor.
+     * @throws \Exception
+     */
+    public function __construct()
     {
-        $query = 'SELECT * FROM things_types WHERE id = ?';
-        $giftData = DataBase::getInstance()->prepare($query);
-        $giftData->execute([$giftValue]);
-
-        $data = $giftData->fetch();
-
-        if ($data) self::saveGift($data);
-
-        return $data;
+        parent::__construct();
+        $this->id = intval($this->giftValue['id']);
+        $this->name = $this->giftValue['thing_name'];
     }
 
     /**
-     * @param array $data
+     * @return int
      */
-    static function saveGift($data)
+    public function getId()
     {
-        $_SESSION['gift']['id'] = $data['id'];
-        $_SESSION['gift']['name'] = $data['thing_name'];
-
-        $query = 'SELECT * FROM user_gift WHERE user_id = ? and thing_id = ?';
-        $giftData = DataBase::getInstance()->prepare($query);
-        $giftData->execute([
-            $_SESSION['loggedUser']['id'],
-            $data['id']
-        ]);
-
-        var_dump($giftData->fetch());
+        return $this->id;
     }
 
     /**
-     * @param array $thing
-     * @return string|null
+     * @return string
      */
-    static function reduceList($thing)
+    public function getName()
     {
-        if ($thing and !Helper::checkUser('final')) {
+        return $this->name;
+    }
+
+    /**
+     * @param $user
+     * @return null|string
+     */
+    public function reduceList($user)
+    {
+        if (!Helper::checkUser('final')) {
             $_SESSION['final']['lastToken'] = $_POST['finalGiftToken'];
 
             $query = 'UPDATE things_types SET things_count = things_count-1 
                       WHERE id = ? AND thing_name = ?';
-            $giftData = DataBase::getInstance()->prepare($query);
-            $giftData->execute([$thing['id'], $thing['name']]);
 
-            return self::finalAction();
+            if (DataBase::getInstance()->prepare($query)->execute([$this->id, $this->name])
+                and $this->saveGift($user))
+                return self::finalAction();
+            else return 'ошибка при обновлении данных по подарку в ' . __METHOD__;
         } else return null;
+    }
+
+    /**
+     * @param array $user
+     * @return bool
+     */
+    protected function saveGift($user)
+    {
+        $query = 'INSERT INTO user_gift (`user_id`, `thing_id`, `date_insert`) VALUES (?, ?, NOW())';
+        return DataBase::getInstance()->prepare($query)->execute([$user['id'], $this->id]);
     }
 
     /**
@@ -82,5 +95,16 @@ class ThingGift extends Gift
         header("refresh:4; url=/");
 
         return "спасибо, что вы с нами!\nдо свидания!";
+    }
+
+    protected static function setGiftValue($value)
+    {
+        $query = 'SELECT * FROM things_types WHERE id = ?';
+        $giftData = DataBase::getInstance()->prepare($query);
+        $giftData->execute([$value]);
+
+        $data = $giftData->fetch();
+
+        return $data;
     }
 }

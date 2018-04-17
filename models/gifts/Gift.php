@@ -21,29 +21,40 @@ abstract class Gift
     const userChoiceSecond = null;
 
     /**
-     * @var int|null
+     * @var int
      */
-    private $value = null;
+    protected $value = null;
+
+    /**
+     * @var string
+     */
+    protected $giftValue = null;
 
     /**
      * Gift constructor.
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct()
     {
         $this->value = rand(0, static::MAX_RANDOM);
-        $_SESSION['gift']['value'] = $this->giftSelector();;
-        $_SESSION['gift']['userChoiceFirst'] = static::userChoiceFirst;
-        $_SESSION['gift']['userChoiceSecond'] = static::userChoiceSecond;
+        $this->giftValue = static::setGiftValue($this->value);
     }
 
     /**
-     * @return null|string
-     * @throws \Exception
+     * @return array|string
      */
-    protected function giftSelector()
+    public function getGiftValue()
     {
-        return self::dictionary(static::class, $this->value);
+        return $this->giftValue;
+    }
+
+    /**
+     * @param int|null $value
+     * @return array|string|null
+     */
+    protected static function setGiftValue($value)
+    {
+        return $value;
     }
 
     /**
@@ -76,29 +87,6 @@ abstract class Gift
                 break;
             case 3:
                 return new ThingGift();
-                break;
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * @param string $className
-     * @param int $giftValue
-     * @return null|string
-     * @throws Exception
-     */
-    private static function dictionary($className, $giftValue)
-    {
-        switch (preg_replace('~app\\\models\\\gifts\\\~', '', $className)) {
-            case 'MoneyGift':
-                return MoneyGift::giftValue($giftValue);
-                break;
-            case 'ThingGift':
-                return ThingGift::giftValue($giftValue)['thing_name'];
-                break;
-            case 'BonusGift':
-                return BonusGift::giftValue($giftValue);
                 break;
             default:
                 return null;

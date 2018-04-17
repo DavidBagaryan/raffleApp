@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `raffle_users` (
   `bank_account` varchar(100) NOT NULL DEFAULT 'нет реквизитов для отправки',
   `is_active` char(1) NOT NULL DEFAULT 'Y',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

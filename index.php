@@ -22,10 +22,12 @@ spl_autoload_register(function ($class) {
     require_once "{$class}.php";
 });
 
+//unset($_SESSION['final']['lastToken'], $_POST, $_GET);die;
+
 try {
     $authService = AuthService::check();
     $raffle = Raffle::check();
-    $gift = Gift::check();
+    Gift::check();
 
     //add some variables for user params
     if (!is_null($_SESSION['loggedUser'])) {
@@ -37,29 +39,29 @@ try {
     }
 
     // add some another variables for user params
-    if (!is_null($_SESSION['gift'])) {
-        $userDefaultParams['giftValue'] = $_SESSION['gift']['value'];
+    if ($raffle and $raffle instanceof Gift) {
+        $userDefaultParams['giftValue'] = $raffle->getGiftValue()['thing_name'];
 
-        $userDefaultParams['giftId'] = $_SESSION['gift']['id'];
-        $userDefaultParams['giftName'] = $_SESSION['gift']['name'];
+        $userDefaultParams['giftId'] = ($raffle instanceof ThingGift) ? $raffle->getId() : null;
+        $userDefaultParams['giftName'] = ($raffle instanceof ThingGift) ? $raffle->getName() : null;
 
-        $userDefaultParams['userChoiceFirst'] = $_SESSION['gift']['userChoiceFirst'];
-        $userDefaultParams['userChoiceSecond'] = $_SESSION['gift']['userChoiceSecond'];
+        $userDefaultParams['userChoiceFirst'] = $raffle::userChoiceFirst;
+        $userDefaultParams['userChoiceSecond'] = $raffle::userChoiceSecond;
     }
 
     // proto router
     if (!is_null($_SESSION['loggedUser'])) {
         $menu = new Renderer('loggedUser.html');
 
-        if (is_null($_SESSION['gift'])) $content = new Renderer('raffle.html');
-        if (!is_null($_SESSION['gift']) and is_null($_GET['giftAction']))
-            $content = new Renderer('userChoice.html');
-        if (!is_null($_SESSION['gift']) and $_GET['giftAction'] === 'first') {
-            $content = new Renderer('success.html');
-            $userDefaultParams['errors'] = ThingGift::reduceList($_SESSION['gift']);
-        } elseif (!is_null($_SESSION['gift']) and $_GET['giftAction'] === 'second') {
-            $content = new Renderer('denial.html');
-            $userDefaultParams['errors'] = ThingGift::finalAction();
+        if (!$raffle) $content = new Renderer('raffle.html');
+        else {
+            if ($_GET['giftAction'] === 'first') {
+                $content = new Renderer('success.html');
+                $userDefaultParams['errors'] = $raffle->reduceList($_SESSION['loggedUser']);
+            } elseif ($_GET['giftAction'] === 'second') {
+                $content = new Renderer('denial.html');
+                $userDefaultParams['errors'] = ThingGift::finalAction();
+            } else $content = new Renderer('userChoice.html');
         }
 
     } else {
@@ -80,4 +82,4 @@ try {
     ]);
 }
 
-var_dump($_POST);
+var_dump($_SESSION);
