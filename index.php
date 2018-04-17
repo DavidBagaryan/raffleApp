@@ -14,7 +14,6 @@ use app\models\Raffle;
 use app\models\Renderer;
 use app\models\authServices\AuthService;
 
-require_once 'index.php';
 require_once 'config.php';
 
 

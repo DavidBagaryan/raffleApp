@@ -14,10 +14,12 @@
 -- Дамп структуры для таблица testDB.user_gift
 CREATE TABLE IF NOT EXISTS `user_gift` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
+  `date_insert` datetime DEFAULT NULL,
   `user_id` int(255) NOT NULL DEFAULT '0',
   `gift` int(255) DEFAULT '0',
   `gift_type` tinyint(1) DEFAULT '0',
-  `date_insert` datetime DEFAULT NULL,
+  `is_sent` char(1) NOT NULL DEFAULT 'N',
+  `date_send` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `thing_id` (`gift`),

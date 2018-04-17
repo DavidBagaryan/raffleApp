@@ -28,3 +28,7 @@ $userDefaultParams = [
     'giftToken' => rand(10000, 99999),
 ];
 
+// cron
+
+define('QUERY_LIMIT', 100);
+
