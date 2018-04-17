@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `user_gift` (
   KEY `user_id` (`user_id`),
   KEY `thing_id` (`gift`),
   KEY `gift_type` (`gift_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFA ULT CHARSET=utf8;
 
 -- Экспортируемые данные не выделены.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
