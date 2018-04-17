@@ -6,6 +6,7 @@
  * Time: 15:38
  */
 
+use app\models\gifts\BonusGift;
 use app\models\gifts\Gift;
 use app\models\gifts\MoneyGift;
 use app\models\gifts\ThingGift;
@@ -54,10 +55,17 @@ try {
 
         if (!$raffle) $content = new Renderer('raffle.html');
         else {
+            $userBonus = function ($action) {
+                return $action['newBonus'] ? $action['newBonus'] : $_SESSION['loggedUser']['bonuses'];
+            };
+
             $content = new Renderer('userChoice.html');
             switch ($_GET['giftAction']) {
                 case 'first':
-                    $userDefaultParams['errors'] = $raffle->userFirstAction($_SESSION['loggedUser']);
+                    $firstAction = $raffle->userFirstAction($_SESSION['loggedUser']);
+                    $userDefaultParams['errors'] = $firstAction;
+                    $userDefaultParams['userBonus'] = $raffle instanceof BonusGift
+                        ? $userBonus($firstAction) : $userDefaultParams['userBonus'];
                     $userDefaultParams['userChoiceFirst'] = null;
                     $userDefaultParams['userChoiceSecond'] = null;
                     break;
@@ -66,9 +74,7 @@ try {
 
                     if ($raffle instanceof MoneyGift) {
                         $userDefaultParams['errors'] = $secondAction['error'];
-                        $userDefaultParams['userBonus'] = $secondAction['newBonus']
-                            ? $secondAction['newBonus']
-                            : $_SESSION['loggedUser']['bonuses'];
+                        $userDefaultParams['userBonus'] = $userBonus($secondAction);
                     } else $userDefaultParams['errors'] = $secondAction;
 
                     $userDefaultParams['userChoiceFirst'] = null;

@@ -11,20 +11,21 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Дамп структуры для таблица testDB.user_gift
-CREATE TABLE IF NOT EXISTS `user_gift` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `user_id` int(255) NOT NULL DEFAULT '0',
-  `gift` int(255) DEFAULT '0',
-  `gift_type` tinyint(1) DEFAULT '0',
-  `date_insert` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `thing_id` (`gift`),
-  KEY `gift_type` (`gift_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+-- Дамп структуры для таблица testDB.dictionary_gift_type
+CREATE TABLE IF NOT EXISTS `dictionary_gift_type` (
+  `id` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Экспортируемые данные не выделены.
+-- Дамп данных таблицы testDB.dictionary_gift_type: ~3 rows (приблизительно)
+/*!40000 ALTER TABLE `dictionary_gift_type` DISABLE KEYS */;
+INSERT INTO `dictionary_gift_type` (`id`, `type`) VALUES
+	(1, 'money'),
+	(2, 'bonus'),
+	(3, 'thing');
+/*!40000 ALTER TABLE `dictionary_gift_type` ENABLE KEYS */;
+
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

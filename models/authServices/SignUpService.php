@@ -55,10 +55,16 @@ class SignUpService extends AuthService
 
     private function addUser()
     {
-        $query = 'INSERT INTO raffle_users (`user_login`, `user_password`) VALUES (?, ?)';
+        $query = 'INSERT INTO raffle_users (`user_login`, `user_password`, `address`, `bank_account`) 
+                  VALUES (?, ?, ?, ?)';
 
         if (DataBase::getInstance()->prepare($query)
-            ->execute([self::$login, password_hash(self::$password, PASSWORD_DEFAULT)])) {
+            ->execute([
+                self::$login,
+                password_hash(self::$password, PASSWORD_DEFAULT),
+                self::$postData['address'],
+                self::$postData['bankDetails'],
+            ])) {
             self::$errors[] = 'регистрация прошла успешно';
             header("refresh:1; url=/");
         } else self::$errors[] = "ошибка при регистрации!\nпроверьте данные и повторите попытку";

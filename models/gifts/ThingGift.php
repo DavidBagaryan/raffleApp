@@ -96,12 +96,11 @@ class ThingGift extends Gift
      */
     protected function saveGift($user)
     {
-        $query = 'INSERT INTO user_gift (`user_id`, `gift`, `gift_type`, `date_insert`) VALUES (?, ?, ?, ?)';
+        $query = 'INSERT INTO user_gift (`user_id`, `gift`, `gift_type`, `date_insert`) VALUES (?, ?, ?, NOW())';
         return DataBase::getInstance()->prepare($query)->execute([
             $user['id'],
             $this->id,
-            self::THING_TYPE_ID,
-            'NOW()'
+            self::THING_TYPE_ID
         ]);
     }
 

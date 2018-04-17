@@ -13,11 +13,19 @@ class BonusGift extends Gift
 {
     const MAX_RANDOM = 9999;
 
-    const userChoiceFirst = null;
+    const USER_CHOICE_FIRST = 'зачислить баллы';
 
-    const userChoiceSecond = null;
+    public function userFirstAction($user)
+    {
+        self::addBonus($this, $user, true);
+    }
 
-    static function giftValue($bonus)
+    public function userSecondAction($user = null)
+    {
+        return $user;
+    }
+
+    static function setGiftValue($bonus)
     {
         return "бонус в нашем казино в размере {$bonus} баллов";
     }

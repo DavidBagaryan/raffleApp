@@ -9,6 +9,7 @@
 namespace app\models\gifts;
 
 
+use app\models\DataBase;
 use app\models\Helper;
 use Exception;
 
@@ -19,6 +20,8 @@ abstract class Gift
     const USER_CHOICE_FIRST = null;
 
     const USER_CHOICE_SECOND = null;
+
+    static $conversionRate = 0.15;
 
     /**
      * @var int
@@ -32,7 +35,7 @@ abstract class Gift
 
     /**
      * @param $user
-     * @return null|string
+     * @return array|string|null
      */
     abstract public function userFirstAction($user);
 
@@ -114,5 +117,33 @@ abstract class Gift
         header("refresh:5; url=/");
 
         return "спасибо, что вы с нами!\nдо свидания!";
+    }
+
+    /**
+     * @param Gift $gift
+     * @param array$user
+     * @param bool $bonusAction
+     * @return array|null|string
+     */
+    protected static function addBonus($gift, $user, $bonusAction = false)
+    {
+        if (!Helper::checkUser('final')) {
+            $_SESSION['final']['lastToken'] = $_POST['finalGiftToken'];
+            $bonus = $bonusAction ? $gift->value : intval($gift->value / self::$conversionRate);
+
+            $query = 'UPDATE raffle_users SET `bonuses` = `bonuses` + ? WHERE `id` = ? AND `user_login` = ?';
+            if (DataBase::getInstance()->prepare($query)->execute([
+                $bonus,
+                $user['id'],
+                $user['user_login']
+            ])) {
+                $_SESSION['loggedUser']['bonuses'] = $_SESSION['loggedUser']['bonuses'] + $bonus;
+                return [
+                    'error' => "денежная сумма будет конвертированна в баллы лояльности в нашем казино,\n
+                        количество баллов: {$bonus}",
+                    'newBonus' => $_SESSION['loggedUser']['bonuses']
+                ];
+            } else return 'ошибка конвертации денежных средств';
+        } else return null;
     }
 }
