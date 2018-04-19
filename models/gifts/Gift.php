@@ -34,7 +34,7 @@ abstract class Gift
     protected $giftValue = null;
 
     /**
-     * @param $user
+     * @param array $user
      * @return array|string|null
      */
     abstract public function userFirstAction($user);
@@ -64,15 +64,6 @@ abstract class Gift
     }
 
     /**
-     * @param int|null $value
-     * @return array|string|null
-     */
-    protected static function setGiftValue($value)
-    {
-        return $value;
-    }
-
-    /**
      * @return false|string
      */
     static function check()
@@ -87,7 +78,7 @@ abstract class Gift
     }
 
     /**
-     * @param $random
+     * @param int $random
      * @return Gift|null
      * @throws \Exception
      */
@@ -111,7 +102,7 @@ abstract class Gift
     /**
      * @return string
      */
-    static function endAction()
+    protected static function endAction()
     {
         unset($_SESSION['loggedUser'], $_SESSION['gift']);
         header("refresh:5; url=/");
@@ -120,8 +111,17 @@ abstract class Gift
     }
 
     /**
+     * @param int|null $value
+     * @return array|string|null
+     */
+    protected static function setGiftValue($value)
+    {
+        return $value;
+    }
+
+    /**
      * @param Gift $gift
-     * @param array$user
+     * @param array $user
      * @param bool $bonusAction
      * @return array|null|string
      */

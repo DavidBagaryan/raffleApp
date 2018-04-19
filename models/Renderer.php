@@ -30,10 +30,10 @@ class Renderer
     }
 
     /**
-     * @param $params
+     * @param null|array $params
      * @return string|null
      */
-    function render($params = null)
+    public function render($params = null)
     {
         if (!is_null($params) and is_array($params))
             foreach ($params as $param => $value) {
@@ -44,11 +44,18 @@ class Renderer
         return $this->template;
     }
 
+    /**
+     * @param string $param
+     * @param string|null $value
+     */
     private function replaceValue($param, $value)
     {
         $this->template = str_replace("~{$param}~", $value, $this->template);
     }
 
+    /**
+     * @param string $param
+     */
     private function replaceTag($param)
     {
         $fullTagPattern = function ($innerHtml) {

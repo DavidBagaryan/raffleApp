@@ -1,0 +1,146 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+
+namespace app\models {
+
+    DataBase o-- PDO: returns
+
+    class DataBase << Singleton >> {
+        # {static} instance
+
+        - construct()
+        - clone()
+        - wakeup()
+        + {static} getInstance(): PDO
+        - {static} getConnection(): PDO
+    }
+
+    class Helper {
+        + {static} mbUcFirst(str: string, encoding: string): string|false
+        + {static} checkUser(formName: string): bool
+    }
+
+    Raffle o-- Gift: returns
+
+    class Raffle {
+        + {static} check(): Gift
+        - {static} checkRandom(random: int): bool
+    }
+
+    class Renderer {
+        - string template
+
+        + construct(templateName: string)
+        + render(params:null|string): string|null
+        - replaceValue(param: string, value: string|null)
+        - replaceTag (param: string)
+    }
+}
+
+namespace app\models\authServices {
+    AuthService - DataBase: use
+    AuthService - Exception: throws
+
+    abstract AuthService {
+        # string serviceTemplate
+        + {static} array postData
+        + {static} array getData
+        + {static} array errors
+        + {static} string login
+        + {static} string password
+        + {static} string password2
+
+        + {abstract} action(): string|null
+        + construct(serviceTemplate:null|string)
+        + getServiceTemplate(): string
+        # getUserData(): array
+        # checkLogPass()
+        + {static} check(): AuthService
+        # {static} checkLength(arrayProperties: array)
+    }
+
+    AuthService <|-- SignUpService
+
+    class SignUpService {
+        + action(): string|null
+        - checkAddressAndBank()
+        - addUser()
+    }
+
+    AuthService <|-- LoginService
+
+    class LoginService {
+        + action(): string|null
+        - enterUserParams(user: array)
+    }
+
+    AuthService <|-- NoService
+
+    class NoService{
+        + action(): null
+    }
+
+    AuthService <|-- LogoutService
+
+    class LogoutService{
+        + action(): string|null
+    }
+}
+
+namespace app\models\gifts {
+    Gift - DataBase: use
+    Gift - Helper: use
+    Gift - Exception: throws
+
+    abstract Gift {
+        # int value
+        # string giftValue
+
+        + {abstract} userFirstAction(user: array): array|string|null
+        + {abstract} userSecondAction(user: array|null): array|string|null
+        + construct()
+        + getGiftValue(): array|string
+        + {static} check(): false|string
+        + {static} select(random: int): Gift|null
+        # {static} endAction(): string
+        # {static} setGiftValue(value: int|null): array|string|null
+        # {static} addBonus(gift: Gift, user: array, bonusAction: bool): array|null|string
+    }
+
+    Gift <|-- MoneyGift
+
+    class MoneyGift{
+        + userFirstAction(user: array): string|null
+        + userSecondAction(user: array|null): array|string|null
+        # {static} setGiftValue(value: int|null): string
+    }
+
+    Gift <|-- ThingGift
+
+    class ThingGift {
+        - int id
+        - string name
+
+        + construct()
+        + getId(): int
+        + getName(): string
+        + userFirstAction(user: array): string|null
+        + userSecondAction(user: array|null): array|string|null
+        + finalAction(user: array): string
+        + saveGift(user: array): bool
+        # {static} setGiftValue(value: int|null): string
+    }
+
+    Gift <|-- BonusGift
+
+    class BonusGift {
+        + userFirstAction(user: array): string|null
+        + userSecondAction(user: array|null): array|string|null
+        + finalAction(user: array): string
+        + saveGift(user: array): bool
+        # {static} setGiftValue(value: int|null): string
+    }
+}
+
+@enduml

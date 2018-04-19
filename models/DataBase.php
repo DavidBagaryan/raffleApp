@@ -26,6 +26,10 @@ class DataBase
     {
     }
 
+    private function __wakeup()
+    {
+    }
+
     /**
      * @return PDO
      */

@@ -37,7 +37,10 @@ class LoginService extends AuthService
         return array_shift(self::$errors);
     }
 
-    function enterUserParams($user)
+    /**
+     * @param array $user
+     */
+    private function enterUserParams($user)
     {
         $_SESSION['loggedUser'] = $user;
         self::$errors[] = 'вход в аккаунт';

@@ -96,6 +96,9 @@ abstract class AuthService
         if (self::$password === '') self::$errors[] = self::EMPTY_PASSWORD;
     }
 
+    /**
+     * @param array $arrayProperties
+     */
     protected static function checkLength($arrayProperties)
     {
         if (is_array($arrayProperties))
